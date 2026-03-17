@@ -230,6 +230,188 @@
         .view-all { color: var(--burnt-orange); text-decoration: none; font-size: 0.9rem; }
         .view-all:hover { color: var(--mono-yellow); }
 
+        /* ── BUSCADOR Y FILTROS ── */
+        .search-filter-bar {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .search-input-wrap { position: relative; }
+
+        .search-input {
+            width: 100%;
+            background: #1a1a1a;
+            border: 1px solid var(--dark-orange);
+            color: #e0e0e0;
+            padding: 0.7rem 0.7rem 0.7rem 2.4rem;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.9rem;
+            transition: border-color 0.2s;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--mono-yellow);
+            box-shadow: 0 0 8px rgba(244,208,63,0.15);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 0.7rem; top: 50%;
+            transform: translateY(-50%);
+            color: var(--dark-orange);
+            pointer-events: none;
+        }
+
+        .filter-btns { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+
+        .filter-btn {
+            padding: 0.35rem 0.9rem;
+            background: rgba(211,84,0,0.1);
+            border: 1px solid var(--dark-orange);
+            color: var(--mono-yellow);
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.78rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.2s;
+        }
+
+        .filter-btn:hover, .filter-btn.activo {
+            background: var(--dark-orange);
+            color: #000;
+        }
+
+        .no-results {
+            color: #555; font-size: 0.9rem;
+            padding: 2rem; text-align: center;
+            border: 1px dashed #333;
+            grid-column: 1 / -1;
+        }
+
+        /* ── BOTÓN BORRAR en card propia ── */
+        .btn-delete-card {
+            background: none;
+            border: 1px solid #e74c3c;
+            color: #e74c3c;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.7rem;
+            padding: 0.15rem 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-transform: uppercase;
+        }
+
+        .btn-delete-card:hover { background: #e74c3c; color: #fff; }
+
+        /* ── MODAL DE DETALLE ── */
+        .detail-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.9);
+            z-index: 9100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        .detail-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .detail-modal {
+            background: #0d0d0d;
+            border: 2px solid var(--burnt-orange);
+            width: 100%;
+            max-width: 600px;
+            max-height: 88vh;
+            overflow-y: auto;
+            position: relative;
+            transform: scale(0.95);
+            transition: transform 0.3s;
+        }
+
+        .detail-overlay.active .detail-modal { transform: scale(1); }
+
+        .detail-header {
+            background: linear-gradient(135deg, rgba(211,84,0,0.3), rgba(0,0,0,0.8));
+            padding: 1.5rem 3rem 1.5rem 1.5rem;
+            border-bottom: 1px solid var(--dark-orange);
+        }
+
+        .detail-tipo {
+            font-size: 0.75rem;
+            color: var(--burnt-orange);
+            font-weight: bold;
+            margin-bottom: 0.4rem;
+        }
+
+        .detail-nombre {
+            font-family: 'VT323', monospace;
+            font-size: 2.5rem;
+            color: var(--mono-yellow);
+            text-shadow: var(--text-glow);
+            line-height: 1.1;
+        }
+
+        .detail-body { padding: 1.5rem; }
+
+        .detail-clase-row {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .detail-desc {
+            color: #bbb;
+            font-size: 0.92rem;
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+            border-left: 3px solid var(--dark-orange);
+            padding-left: 1rem;
+        }
+
+        .detail-meta-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .detail-meta-item {
+            background: rgba(211,84,0,0.08);
+            border: 1px solid #2a2a2a;
+            padding: 0.6rem;
+            font-size: 0.8rem;
+        }
+
+        .detail-meta-label { color: #666; font-size: 0.7rem; margin-bottom: 0.2rem; text-transform: uppercase; }
+        .detail-meta-val { color: var(--amber); }
+
+        .detail-close {
+            position: absolute;
+            top: 1rem; right: 1rem;
+            background: none;
+            border: 1px solid var(--dark-orange);
+            color: var(--burnt-orange);
+            font-size: 1.1rem;
+            cursor: pointer;
+            width: 30px; height: 30px;
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .detail-close:hover { background: var(--dark-orange); color: #000; }
+
         .anomaly-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -590,11 +772,222 @@
         ::-webkit-scrollbar-track { background: #0d0d0d; }
         ::-webkit-scrollbar-thumb { background: var(--dark-orange); }
         ::-webkit-scrollbar-thumb:hover { background: var(--burnt-orange); }
+
+        /* ── API KEY BANNER ── */
+        .api-banner {
+            background: rgba(0,0,0,0.9);
+            border-bottom: 2px solid #8e44ad;
+            padding: 0.6rem 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            font-size: 0.78rem;
+        }
+        .api-banner label { color: #8e44ad; text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; }
+        .api-banner input {
+            flex: 1; min-width: 200px;
+            background: #111; border: 1px solid #8e44ad; color: #e0e0e0;
+            padding: 0.35rem 0.6rem; font-family: 'Share Tech Mono', monospace; font-size: 0.78rem;
+        }
+        .api-banner input:focus { outline: none; border-color: #bf5fff; }
+        .api-banner span { color: #555; font-size: 0.72rem; }
+        .api-key-ok { color: #2ecc71 !important; }
+
+        /* ── BTN GENERAR IA ── */
+        .btn-ai {
+            width: 100%; padding: 0.8rem;
+            background: linear-gradient(135deg, #4a235a, #6c3483);
+            border: 1px solid #8e44ad; color: #e0e0e0;
+            font-family: 'Share Tech Mono', monospace; font-size: 0.88rem;
+            cursor: pointer; text-transform: uppercase; letter-spacing: 1px;
+            transition: all 0.3s; margin-bottom: 0.8rem;
+        }
+        .btn-ai:hover { box-shadow: 0 0 15px #8e44ad; background: #6c3483; }
+        .btn-ai:disabled { opacity: 0.5; cursor: wait; }
+
+        /* ── TERMINAL CHAT ── */
+        .terminal-section {
+            border-top: 2px solid #8e44ad;
+            padding: 3rem 0;
+            margin-top: 1rem;
+        }
+
+        .terminal-section .section-title { color: #bf5fff; }
+        .terminal-section .section-header { border-bottom-color: #8e44ad; }
+
+        .terminal-wrap {
+            background: #050505;
+            border: 1px solid #8e44ad;
+            box-shadow: 0 0 20px rgba(142,68,173,0.2);
+        }
+
+        .terminal-topbar {
+            background: #0d0d0d;
+            border-bottom: 1px solid #8e44ad;
+            padding: 0.5rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.75rem;
+            color: #8e44ad;
+        }
+
+        .terminal-dot {
+            width: 10px; height: 10px; border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        .td-red    { background: #e74c3c; box-shadow: 0 0 6px #e74c3c; }
+        .td-yellow { background: #f1c40f; box-shadow: 0 0 6px #f1c40f; animation-delay: 0.5s; }
+        .td-green  { background: #2ecc71; box-shadow: 0 0 6px #2ecc71; animation-delay: 1s; }
+
+        .terminal-output {
+            height: 320px;
+            overflow-y: auto;
+            padding: 1.2rem;
+            font-size: 0.85rem;
+            line-height: 1.6;
+            scroll-behavior: smooth;
+        }
+
+        .msg-system {
+            color: #8e44ad;
+            margin-bottom: 0.8rem;
+            padding-left: 0.5rem;
+            border-left: 2px solid #8e44ad;
+        }
+
+        .msg-user {
+            color: var(--mono-yellow);
+            margin-bottom: 0.8rem;
+        }
+
+        .msg-user::before { content: '> '; color: var(--dark-orange); }
+
+        .msg-ai {
+            color: #ccc;
+            margin-bottom: 1rem;
+            padding: 0.6rem;
+            background: rgba(142,68,173,0.07);
+            border-left: 2px solid #6c3483;
+        }
+
+        .msg-ai::before {
+            content: '[M.E.G. TERMINAL] ';
+            color: #8e44ad;
+            font-size: 0.75rem;
+        }
+
+        .typing-indicator {
+            color: #8e44ad;
+            font-size: 0.8rem;
+            animation: blink 0.8s infinite;
+        }
+
+        .terminal-input-row {
+            display: flex;
+            border-top: 1px solid #8e44ad;
+            align-items: stretch;
+        }
+
+        .terminal-prompt {
+            padding: 0.8rem 1rem;
+            color: var(--dark-orange);
+            font-size: 0.9rem;
+            border-right: 1px solid #8e44ad;
+            white-space: nowrap;
+        }
+
+        .terminal-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: var(--mono-yellow);
+            padding: 0.8rem;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.88rem;
+        }
+        .terminal-input:focus { outline: none; }
+
+        .terminal-send {
+            padding: 0.8rem 1.2rem;
+            background: #8e44ad;
+            border: none;
+            color: #fff;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .terminal-send:hover { background: #bf5fff; }
+        .terminal-send:disabled { opacity: 0.5; cursor: wait; }
+
+        .quick-btns {
+            padding: 0.6rem 1rem;
+            display: flex; gap: 0.5rem; flex-wrap: wrap;
+            border-top: 1px solid #1a1a1a;
+        }
+
+        .quick-btn {
+            padding: 0.25rem 0.7rem;
+            background: rgba(142,68,173,0.15);
+            border: 1px solid #6c3483;
+            color: #bf5fff;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.72rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .quick-btn:hover { background: #6c3483; color: #fff; }
     </style>
 </head>
 <body>
 
 <div class="scanlines"></div>
+
+<!-- ══ API KEY BANNER ══ -->
+<div class="api-banner" id="apiBanner">
+    <label>🔑 Gemini API Key:</label>
+    <input type="password" id="geminiKey" placeholder="Pega tu API key aquí (aistudio.google.com)">
+    <span id="apiStatus">Sin configurar — las funciones de IA estarán desactivadas</span>
+</div>
+
+<!-- ══ MODAL DE DETALLE ══ -->
+<div class="detail-overlay" id="detailOverlay">
+    <div class="detail-modal">
+        <button class="detail-close" id="detailClose">✕</button>
+        <div class="detail-header">
+            <div class="detail-tipo" id="detailTipo"></div>
+            <div class="detail-nombre" id="detailNombre"></div>
+        </div>
+        <div class="detail-body">
+            <div class="detail-clase-row">
+                <span id="detailClaseBadge"></span>
+                <span style="color:#666; font-size:0.82rem;" id="detailFecha"></span>
+            </div>
+            <p class="detail-desc" id="detailDesc"></p>
+            <div class="detail-meta-grid">
+                <div class="detail-meta-item">
+                    <div class="detail-meta-label">Reportado por</div>
+                    <div class="detail-meta-val" id="detailAutor"></div>
+                </div>
+                <div class="detail-meta-item">
+                    <div class="detail-meta-label">Grabaciones</div>
+                    <div class="detail-meta-val" id="detailGrabaciones"></div>
+                </div>
+                <div class="detail-meta-item">
+                    <div class="detail-meta-label">Estado</div>
+                    <div class="detail-meta-val">⚠ EN INVESTIGACIÓN</div>
+                </div>
+                <div class="detail-meta-item">
+                    <div class="detail-meta-label">Verificado M.E.G.</div>
+                    <div class="detail-meta-val" id="detailVerificado"></div>
+                </div>
+            </div>
+            <div id="detailDeleteWrap"></div>
+        </div>
+    </div>
+</div>
 
 <!-- ══ MODAL: Ventana para publicar anomalía ══ -->
 <div class="modal-overlay" id="modalOverlay">
@@ -644,6 +1037,7 @@
             <input type="text" class="form-input" id="autorAnomalia" placeholder="@usuario">
         </div>
 
+        <button class="btn-ai" id="btnGenerarIA" disabled>✦ GENERAR DESCRIPCIÓN CON IA</button>
         <button class="btn-submit" id="btnPublicar">▶ PUBLICAR REPORTE</button>
     </div>
 </div>
@@ -700,6 +1094,21 @@
             <div class="section-header">
                 <h2 class="section-title">Anomalías Recientes</h2>
                 <a href="#" class="view-all">Ver todo ></a>
+            </div>
+
+            <!-- Buscador + Filtros -->
+            <div class="search-filter-bar">
+                <div class="search-input-wrap">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" class="search-input" id="buscador" placeholder="Buscar anomalía por nombre...">
+                </div>
+                <div class="filter-btns">
+                    <button class="filter-btn activo" data-filtro="TODOS">Todos</button>
+                    <button class="filter-btn" data-filtro="ENTIDAD">Entidades</button>
+                    <button class="filter-btn" data-filtro="NIVEL">Niveles</button>
+                    <button class="filter-btn" data-filtro="OBJETO">Objetos</button>
+                    <button class="filter-btn" data-filtro="FENÓMENO">Fenómenos</button>
+                </div>
             </div>
 
             <!-- Las cards se generan aquí dinámicamente con JS -->
@@ -853,6 +1262,54 @@
     </section>
 </main>
 
+<!-- ══ TERMINAL M.E.G. IA ══ -->
+<section class="terminal-section" id="terminal-ia">
+    <div style="max-width:1400px; margin:0 auto; padding:0 2rem;">
+        <div class="section-header">
+            <h2 class="section-title">🤖 Terminal M.E.G. — Asistente de Supervivencia</h2>
+            <span style="color:#8e44ad; font-size:0.8rem;">Powered by Gemini AI</span>
+        </div>
+
+        <div class="terminal-wrap">
+            <div class="terminal-topbar">
+                <div class="terminal-dot td-red"></div>
+                <div class="terminal-dot td-yellow"></div>
+                <div class="terminal-dot td-green"></div>
+                <span style="margin-left:0.5rem;">MEG_TERMINAL_v2.1 // SUPERVIVENCIA // ENCRIPTADO</span>
+            </div>
+
+            <div class="terminal-output" id="chatOutput">
+                <div class="msg-system">
+                    ══════════════════════════════════════════<br>
+                    TERMINAL M.E.G. — SISTEMA DE SUPERVIVENCIA<br>
+                    Clasificación: ACCESO RESTRINGIDO<br>
+                    ══════════════════════════════════════════<br>
+                    Consulta sobre entidades, niveles, estrategias de supervivencia<br>
+                    o cualquier anomalía documentada. El sistema responderá en personaje.<br>
+                    <br>
+                    <span style="color:#e74c3c;">⚠ CONFIGURA TU API KEY GEMINI ARRIBA PARA ACTIVAR.</span>
+                </div>
+            </div>
+
+            <div class="quick-btns">
+                <button class="quick-btn" data-q="¿Cómo sobrevivo en el Nivel 0?">Nivel 0</button>
+                <button class="quick-btn" data-q="¿Qué hago si encuentro un Smiler?">Smilers</button>
+                <button class="quick-btn" data-q="¿Cómo escapar de los Backrooms?">Escapar</button>
+                <button class="quick-btn" data-q="¿Para qué sirve el Almond Water?">Almond Water</button>
+                <button class="quick-btn" data-q="¿Cuál es la entidad más peligrosa?">Más peligrosa</button>
+                <button class="quick-btn" data-q="¿Qué es el no-clip?">No-clip</button>
+            </div>
+
+            <div class="terminal-input-row">
+                <div class="terminal-prompt">EXPLORADOR://</div>
+                <input type="text" class="terminal-input" id="chatInput" placeholder="Escribe tu consulta..." maxlength="300">
+                <button class="terminal-send" id="chatSend" disabled>ENVIAR</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+
 <footer>
     <div class="footer-logo">THE BACKROOMS DATABASE</div>
     <p class="footer-text">Esta base de datos es mantenida por exploradores independientes y el M.E.G. (Major Explorer Group). Si estás leyendo esto, ya es demasiado tarde para volver atrás.</p>
@@ -865,8 +1322,12 @@
      ══════════════════════════════════════ -->
 <script>
 
-// ── 1. TIMESTAMP EN TIEMPO REAL ──
-// setInterval ejecuta una función cada X milisegundos (1000 = 1 segundo)
+// ── ESTADO GLOBAL ──
+let filtroActivo = 'TODOS';
+let textoBusqueda = '';
+let indiceDetalle = null;
+
+// ── 1. TIMESTAMP ──
 function actualizarTimestamp() {
     const ahora = new Date();
     document.getElementById('timestamp').textContent =
@@ -875,205 +1336,110 @@ function actualizarTimestamp() {
 setInterval(actualizarTimestamp, 1000);
 actualizarTimestamp();
 
-
 // ── 2. DATOS INICIALES ──
-// Estas son las anomalías que vienen "de fábrica" en la base de datos.
-// Cada objeto {} tiene las propiedades de una anomalía.
 const anomaliasIniciales = [
-    {
-        tipo: 'ENTIDAD',
-        numero: '1',
-        nombre: '"Facelings"',
-        clase: '3',
-        descripcion: 'Humanos que parecen normales... pero algo está fundamentalmente mal. Pueden ser pacíficos o hostiles dependiendo del nivel en que se encuentren. No hacer contacto visual.',
-        autor: '@meg_operator',
-        fecha: 'Hace 1 hora',
-        grabaciones: 7
-    },
-    {
-        tipo: 'ENTIDAD',
-        numero: '2',
-        nombre: '"Windows"',
-        clase: '4',
-        descripcion: 'Ventanas falsas que te observan y generan paranoia progresiva. Si te acercas demasiado, te succionan al interior. Nunca te aproximes a menos de 3 metros.',
-        autor: '@briggy_field',
-        fecha: 'Hace 3 horas',
-        grabaciones: 4
-    },
-    {
-        tipo: 'ENTIDAD',
-        numero: '3',
-        nombre: '"Smilers"',
-        clase: '5',
-        descripcion: 'Sonrisas flotantes en la oscuridad total. Solo dientes y ojos luminosos. Si ves una sonrisa donde no debería haber nada, ya es demasiado tarde para pensar. Corre.',
-        autor: '@unknown_nightmares',
-        fecha: 'Hace 5 horas',
-        grabaciones: 12
-    },
-    {
-        tipo: 'ENTIDAD',
-        numero: '4',
-        nombre: '"Deathmoths"',
-        clase: '4',
-        descripcion: 'Polillas gigantes luminosas que atraen con su luz a exploradores desprevenidos. Una vez cerca, atacan con velocidad letal. Nunca sigas luces desconocidas en los Backrooms.',
-        autor: '@broogli_archive',
-        fecha: 'Hace 6 horas',
-        grabaciones: 5
-    },
-    {
-        tipo: 'ENTIDAD',
-        numero: '5',
-        nombre: '"Clumps"',
-        clase: '5',
-        descripcion: 'Masas de carne fusionada de origen desconocido. Absorben todo lo que tocan — orgánico e inorgánico. No hay forma confirmada de neutralizarlos. Huir es la única opción.',
-        autor: '@thought_potato',
-        fecha: 'Hace 8 horas',
-        grabaciones: 3
-    },
-    {
-        tipo: 'ENTIDAD',
-        numero: '8',
-        nombre: '"Hound"',
-        clase: '4',
-        descripcion: 'Perros mutados de cuatro patas con capacidades sensoriales superiores. Persiguen sin parar y no se cansan. Correr en zigzag y evitar espacios abiertos es la única táctica documentada.',
-        autor: '@field_recorder_09',
-        fecha: 'Hace 12 horas',
-        grabaciones: 9
-    },
-    {
-        tipo: 'ENTIDAD',
-        numero: '10',
-        nombre: '"Skin-Stealers"',
-        clase: '5',
-        descripcion: 'Te roban la piel y se disfrazan de humanos para cazar a otros exploradores. Identificarlos: movimientos ligeramente fuera de fase, temperatura corporal fría al tacto, pupilas sin reflejo.',
-        autor: '@meg_classified',
-        fecha: 'Hace 1 día',
-        grabaciones: 2
-    },
-    {
-        tipo: 'ENTIDAD',
-        numero: '∞',
-        nombre: '"Partygoers"',
-        clase: '5',
-        descripcion: 'Caras sonrientes amarillas que te invitan a fiestas eternas en el Nivel Fun. Nadie que ha aceptado la invitación ha regresado. Su presencia va acompañada de música distante y globos.',
-        autor: '@meg_operator',
-        fecha: 'Hace 1 día',
-        grabaciones: 15
-    },
-    {
-        tipo: 'NIVEL',
-        numero: '37',
-        nombre: '"The Poolrooms"',
-        clase: '2',
-        descripcion: 'Complejo acuático interior infinito con agua de color turquesa. Relativamente seguro pero fácil perderse. Agua potable disponible. Reportes de figuras bajo el agua no confirmados.',
-        autor: '@pool_explorer',
-        fecha: 'Hace 2 días',
-        grabaciones: 8
-    },
-    {
-        tipo: 'OBJETO',
-        numero: '1',
-        nombre: '"Almond Water"',
-        clase: '0',
-        descripcion: 'Sustancia líquida de color amarillo pálido con sabor a almendra. Restaura cordura e hidrata. El recurso más valioso para sobrevivientes. Origen desconocido.',
-        autor: '@survival_guide',
-        fecha: 'Hace 2 días',
-        grabaciones: 0
-    }
+    { tipo:'ENTIDAD', numero:'1',  nombre:'"Facelings"',     clase:'3', descripcion:'Humanos que parecen normales... pero algo está fundamentalmente mal. Pueden ser pacíficos o hostiles dependiendo del nivel. No hacer contacto visual.', autor:'@meg_operator', fecha:'Hace 1 hora', grabaciones:7, esPropio:false },
+    { tipo:'ENTIDAD', numero:'2',  nombre:'"Windows"',       clase:'4', descripcion:'Ventanas falsas que te observan y generan paranoia progresiva. Si te acercas demasiado, te succionan al interior. Nunca te aproximes a menos de 3 metros.', autor:'@briggy_field', fecha:'Hace 3 horas', grabaciones:4, esPropio:false },
+    { tipo:'ENTIDAD', numero:'3',  nombre:'"Smilers"',       clase:'5', descripcion:'Sonrisas flotantes en la oscuridad total. Solo dientes y ojos luminosos. Si ves una sonrisa donde no debería haber nada, ya es demasiado tarde para pensar. Corre.', autor:'@unknown_nightmares', fecha:'Hace 5 horas', grabaciones:12, esPropio:false },
+    { tipo:'ENTIDAD', numero:'4',  nombre:'"Deathmoths"',    clase:'4', descripcion:'Polillas gigantes luminosas que atraen con su luz a exploradores desprevenidos. Una vez cerca, atacan con velocidad letal. Nunca sigas luces desconocidas en los Backrooms.', autor:'@broogli_archive', fecha:'Hace 6 horas', grabaciones:5, esPropio:false },
+    { tipo:'ENTIDAD', numero:'5',  nombre:'"Clumps"',        clase:'5', descripcion:'Masas de carne fusionada de origen desconocido. Absorben todo lo que tocan, orgánico e inorgánico. No hay forma confirmada de neutralizarlos. Huir es la única opción.', autor:'@thought_potato', fecha:'Hace 8 horas', grabaciones:3, esPropio:false },
+    { tipo:'ENTIDAD', numero:'8',  nombre:'"Hound"',         clase:'4', descripcion:'Perros mutados de cuatro patas con capacidades sensoriales superiores. Persiguen sin parar y no se cansan. Correr en zigzag y evitar espacios abiertos es la única táctica documentada.', autor:'@field_recorder_09', fecha:'Hace 12 horas', grabaciones:9, esPropio:false },
+    { tipo:'ENTIDAD', numero:'10', nombre:'"Skin-Stealers"', clase:'5', descripcion:'Te roban la piel y se disfrazan de humanos para cazar a otros exploradores. Identificarlos: movimientos fuera de fase, temperatura fría al tacto, pupilas sin reflejo.', autor:'@meg_classified', fecha:'Hace 1 día', grabaciones:2, esPropio:false },
+    { tipo:'ENTIDAD', numero:'∞',  nombre:'"Partygoers"',    clase:'5', descripcion:'Caras sonrientes amarillas que te invitan a fiestas eternas en el Nivel Fun. Nadie que ha aceptado la invitación ha regresado. Su presencia va acompañada de música distante y globos.', autor:'@meg_operator', fecha:'Hace 1 día', grabaciones:15, esPropio:false },
+    { tipo:'NIVEL',   numero:'37', nombre:'"The Poolrooms"', clase:'2', descripcion:'Complejo acuático interior infinito con agua de color turquesa. Relativamente seguro pero fácil perderse. Agua potable disponible. Reportes de figuras bajo el agua no confirmados.', autor:'@pool_explorer', fecha:'Hace 2 días', grabaciones:8, esPropio:false },
+    { tipo:'OBJETO',  numero:'1',  nombre:'"Almond Water"',  clase:'0', descripcion:'Sustancia líquida de color amarillo pálido con sabor a almendra. Restaura cordura e hidrata. El recurso más valioso para sobrevivientes. Origen desconocido.', autor:'@survival_guide', fecha:'Hace 2 días', grabaciones:0, esPropio:false }
 ];
 
-
 // ── 3. LOCALSTORAGE ──
-// localStorage es como una "caja de guardado" en tu navegador.
-// Los datos se quedan aunque recargues la página.
-// JSON.parse convierte texto guardado → objeto JavaScript
-// JSON.stringify convierte objeto JavaScript → texto para guardar
-
 function cargarAnomalias() {
-    // Intentamos leer el guardado. Si no existe, usamos las iniciales.
     const guardadas = localStorage.getItem('backrooms_anomalias');
     return guardadas ? JSON.parse(guardadas) : anomaliasIniciales;
 }
-
 function guardarAnomalias(lista) {
     localStorage.setItem('backrooms_anomalias', JSON.stringify(lista));
 }
 
-
 // ── 4. RENDERIZAR CARDS ──
-// Esta función toma la lista de anomalías y construye el HTML de las cards.
 function renderizarCards() {
     const lista = cargarAnomalias();
-    const grid = document.getElementById('anomalyGrid');
+    const grid  = document.getElementById('anomalyGrid');
 
-    // innerHTML = el contenido HTML dentro del elemento
-    // Usamos .map() para transformar cada anomalía en HTML
-    // y .join('') para unir todo en un solo string
-    grid.innerHTML = lista.map(a => `
-        <article class="anomaly-card">
-            <div class="anomaly-id">${a.tipo} ${a.numero}</div>
+    // Filtrar por tipo y por texto de búsqueda
+    const listaMostrada = lista.filter(a => {
+        const matchTipo  = filtroActivo === 'TODOS' || a.tipo === filtroActivo;
+        const texto      = textoBusqueda.toLowerCase();
+        const matchTexto = !texto
+            || a.nombre.toLowerCase().includes(texto)
+            || a.descripcion.toLowerCase().includes(texto);
+        return matchTipo && matchTexto;
+    });
+
+    if (listaMostrada.length === 0) {
+        grid.innerHTML = '<div class="no-results">// Sin resultados //</div>';
+        actualizarStats(lista);
+        return;
+    }
+
+    grid.innerHTML = listaMostrada.map(a => {
+        const idxReal = lista.indexOf(a);
+        const propioLabel = a.esPropio ? ' <span style="color:#2ecc71;font-size:0.68rem;">● TU REPORTE</span>' : '';
+        const desc = a.descripcion.length > 100 ? a.descripcion.substring(0,100) + '...' : a.descripcion;
+        return `
+        <article class="anomaly-card" data-idx="${idxReal}">
+            <div class="anomaly-id">${a.tipo} Nº${a.numero}${propioLabel}</div>
             <h3 class="anomaly-title">${a.nombre}</h3>
             <div class="anomaly-meta">
                 <span class="diff diff-${a.clase}">Clase ${a.clase}</span>
                 <span>● ${a.fecha}</span>
             </div>
-            <p class="anomaly-desc">${a.descripcion}</p>
+            <p class="anomaly-desc">${desc}</p>
             <div class="anomaly-footer">
                 <span style="color:var(--burnt-orange)">${a.autor}</span>
-                <span>📹 ${a.grabaciones} grabaciones</span>
+                <span style="color:#444;font-size:0.72rem;">[ Ver detalle ]</span>
             </div>
-        </article>
-    `).join('');
+        </article>`;
+    }).join('');
 
-    // Actualizar estadísticas del sidebar
+    // Click en cada card → abrir detalle
+    grid.querySelectorAll('.anomaly-card').forEach(card => {
+        card.addEventListener('click', () => abrirDetalle(parseInt(card.dataset.idx)));
+    });
+
     actualizarStats(lista);
 }
 
-
 // ── 5. ESTADÍSTICAS ──
 function actualizarStats(lista) {
-    // .filter() devuelve solo los elementos que cumplen la condición
-    const niveles   = lista.filter(a => a.tipo === 'NIVEL').length;
-    const entidades = lista.filter(a => a.tipo === 'ENTIDAD').length;
-    const objetos   = lista.filter(a => a.tipo === 'OBJETO' || a.tipo === 'FENÓMENO').length;
-
-    document.getElementById('statNiveles').textContent   = niveles;
-    document.getElementById('statEntidades').textContent = entidades;
-    document.getElementById('statObjetos').textContent   = objetos;
+    document.getElementById('statNiveles').textContent   = lista.filter(a => a.tipo === 'NIVEL').length;
+    document.getElementById('statEntidades').textContent = lista.filter(a => a.tipo === 'ENTIDAD').length;
+    document.getElementById('statObjetos').textContent   = lista.filter(a => a.tipo === 'OBJETO' || a.tipo === 'FENÓMENO').length;
     document.getElementById('statTotal').textContent     = lista.length;
 }
 
+// ── 6. FILTROS ──
+document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('activo'));
+        btn.classList.add('activo');
+        filtroActivo = btn.dataset.filtro;
+        renderizarCards();
+    });
+});
 
-// ── 6. MODAL ──
-// querySelector busca un elemento por su selector CSS
+// ── 7. BUSCADOR ──
+document.getElementById('buscador').addEventListener('input', (e) => {
+    textoBusqueda = e.target.value;
+    renderizarCards();
+});
+
+// ── 8. MODAL DE PUBLICAR ──
 const modalOverlay = document.getElementById('modalOverlay');
-const btnAbrir     = document.getElementById('btnAbrirModal');
-const btnCerrar    = document.getElementById('modalClose');
+document.getElementById('btnAbrirModal').addEventListener('click', () => modalOverlay.classList.add('active'));
+document.getElementById('modalClose').addEventListener('click',    () => modalOverlay.classList.remove('active'));
+modalOverlay.addEventListener('click', e => { if (e.target === modalOverlay) modalOverlay.classList.remove('active'); });
 
-// Al hacer click en "Nueva Anomalía", agregar la clase 'active' al modal
-btnAbrir.addEventListener('click', () => {
-    modalOverlay.classList.add('active');
-});
-
-// Al hacer click en ✕, quitar la clase 'active'
-btnCerrar.addEventListener('click', () => {
-    modalOverlay.classList.remove('active');
-});
-
-// Al hacer click FUERA del modal (en el overlay oscuro), también cierra
-modalOverlay.addEventListener('click', (e) => {
-    // e.target es lo que recibió el click
-    // Solo cerramos si clickearon el overlay, no el modal mismo
-    if (e.target === modalOverlay) {
-        modalOverlay.classList.remove('active');
-    }
-});
-
-
-// ── 7. PUBLICAR ANOMALÍA ──
+// ── 9. PUBLICAR ──
 document.getElementById('btnPublicar').addEventListener('click', () => {
-
-    // Leer los valores del formulario
     const tipo   = document.getElementById('tipoAnomalia').value;
     const numero = document.getElementById('numeroAnomalia').value.trim();
     const nombre = document.getElementById('nombreAnomalia').value.trim();
@@ -1081,58 +1447,254 @@ document.getElementById('btnPublicar').addEventListener('click', () => {
     const desc   = document.getElementById('descAnomalia').value.trim();
     const autor  = document.getElementById('autorAnomalia').value.trim();
 
-    // Validación básica: si falta algo importante, no publicar
     if (!numero || !nombre || !desc) {
-        alert('⚠️ Completa al menos el número, nombre y descripción.');
-        return; // "return" detiene la función aquí
+        alert('Completa al menos el número, nombre y descripción.');
+        return;
     }
 
-    // Crear el objeto de la nueva anomalía
     const nueva = {
-        tipo,
-        numero,
-        nombre: `"${nombre}"`,
-        clase,
-        descripcion: desc,
-        autor: autor ? `@${autor.replace('@', '')}` : '@anónimo',
+        tipo, numero,
+        nombre: '"' + nombre + '"',
+        clase, descripcion: desc,
+        autor: autor ? '@' + autor.replace('@','') : '@anónimo',
         fecha: 'Ahora mismo',
-        grabaciones: 0
+        grabaciones: 0,
+        esPropio: true
     };
 
-    // Agregar al principio de la lista (para que aparezca primero)
     const lista = cargarAnomalias();
-    lista.unshift(nueva); // unshift agrega al inicio del array
+    lista.unshift(nueva);
     guardarAnomalias(lista);
-
-    // Volver a dibujar las cards con la nueva anomalía
     renderizarCards();
 
-    // Cerrar modal y limpiar formulario
     modalOverlay.classList.remove('active');
-    document.getElementById('numeroAnomalia').value = '';
-    document.getElementById('nombreAnomalia').value = '';
-    document.getElementById('descAnomalia').value = '';
-    document.getElementById('autorAnomalia').value = '';
+    ['numeroAnomalia','nombreAnomalia','descAnomalia','autorAnomalia']
+        .forEach(id => document.getElementById(id).value = '');
 
-    // Mostrar notificación de éxito
-    mostrarToast();
+    mostrarToast('REPORTE PUBLICADO', '#2ecc71');
 });
 
+// ── 10. MODAL DE DETALLE ──
+const detailOverlay = document.getElementById('detailOverlay');
 
-// ── 8. TOAST (notificación) ──
-function mostrarToast() {
-    const toast = document.getElementById('toast');
-    toast.classList.add('show');
-    // Después de 3 segundos, ocultar la notificación
-    setTimeout(() => {
-        toast.classList.remove('show');
-    }, 3000);
+function abrirDetalle(idx) {
+    const lista = cargarAnomalias();
+    const a = lista[idx];
+    if (!a) return;
+    indiceDetalle = idx;
+
+    const claseLabels = ['SEGURA','BAJA','MODERADA','ALTA','EXTREMA','NO CLASIFICABLE'];
+    const badge = document.getElementById('detailClaseBadge');
+    badge.className = 'diff diff-' + a.clase;
+    badge.textContent = 'CLASE ' + a.clase + ' — ' + (claseLabels[a.clase] || '?');
+
+    document.getElementById('detailTipo').textContent         = a.tipo + ' N°' + a.numero;
+    document.getElementById('detailNombre').textContent       = a.nombre;
+    document.getElementById('detailFecha').textContent        = 'Reportado: ' + a.fecha;
+    document.getElementById('detailDesc').textContent         = a.descripcion;
+    document.getElementById('detailAutor').textContent        = a.autor;
+    document.getElementById('detailGrabaciones').textContent  = '📹 ' + a.grabaciones;
+    document.getElementById('detailVerificado').textContent   = a.esPropio ? '✗ PENDIENTE' : '✓ CONFIRMADO';
+
+    const deleteWrap = document.getElementById('detailDeleteWrap');
+    if (a.esPropio) {
+        deleteWrap.innerHTML = '<button class="btn-delete-card" id="btnBorrarReporte">⚠ ELIMINAR MI REPORTE</button>';
+        document.getElementById('btnBorrarReporte').addEventListener('click', () => {
+            if (confirm('¿Eliminar este reporte?')) borrarAnomalia(indiceDetalle);
+        });
+    } else {
+        deleteWrap.innerHTML = '';
+    }
+
+    detailOverlay.classList.add('active');
 }
 
+document.getElementById('detailClose').addEventListener('click', () => detailOverlay.classList.remove('active'));
+detailOverlay.addEventListener('click', e => { if (e.target === detailOverlay) detailOverlay.classList.remove('active'); });
 
-// ── 9. INICIAR LA PÁGINA ──
-// Esto se ejecuta cuando la página termina de cargar
+// ── 11. BORRAR ──
+function borrarAnomalia(idx) {
+    const lista = cargarAnomalias();
+    lista.splice(idx, 1);
+    guardarAnomalias(lista);
+    detailOverlay.classList.remove('active');
+    renderizarCards();
+    mostrarToast('REPORTE ELIMINADO', '#e74c3c');
+}
+
+// ── 12. TOAST ──
+function mostrarToast(mensaje, color) {
+    const toast = document.getElementById('toast');
+    toast.textContent = '✓ ' + mensaje;
+    toast.style.borderColor = color;
+    toast.style.color = color;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 3000);
+}
+
+// ── INICIAR ──
 renderizarCards();
+
+
+// ══════════════════════════════════
+// GEMINI AI — funciones de IA
+// ══════════════════════════════════
+
+// ── API KEY SETUP ──
+const geminiKeyInput = document.getElementById('geminiKey');
+const apiStatus      = document.getElementById('apiStatus');
+const chatSendBtn    = document.getElementById('chatSend');
+const btnGenerarIA   = document.getElementById('btnGenerarIA');
+
+// Cargar key guardada si existe
+const savedKey = localStorage.getItem('gemini_key');
+if (savedKey) {
+    geminiKeyInput.value = savedKey;
+    activarIA();
+}
+
+geminiKeyInput.addEventListener('input', () => {
+    const k = geminiKeyInput.value.trim();
+    if (k.length > 10) {
+        localStorage.setItem('gemini_key', k);
+        activarIA();
+    } else {
+        desactivarIA();
+    }
+});
+
+function activarIA() {
+    apiStatus.textContent = '✓ API Key configurada — IA activada';
+    apiStatus.className = 'api-key-ok';
+    chatSendBtn.disabled = false;
+    btnGenerarIA.disabled = false;
+}
+
+function desactivarIA() {
+    apiStatus.textContent = 'Sin configurar — las funciones de IA estarán desactivadas';
+    apiStatus.className = '';
+    chatSendBtn.disabled = true;
+    btnGenerarIA.disabled = true;
+}
+
+function getKey() { return localStorage.getItem('gemini_key') || ''; }
+
+// ── LLAMAR A GEMINI ──
+async function llamarGemini(prompt) {
+    const key = getKey();
+    if (!key) return null;
+
+    const res = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${key}`,
+        {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                contents: [{ parts: [{ text: prompt }] }],
+                generationConfig: { maxOutputTokens: 400, temperature: 0.85 }
+            })
+        }
+    );
+
+    if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error?.message || 'Error de API');
+    }
+
+    const data = await res.json();
+    return data.candidates?.[0]?.content?.parts?.[0]?.text || 'Sin respuesta.';
+}
+
+// ══ CHAT DE SUPERVIVENCIA ══
+const chatOutput  = document.getElementById('chatOutput');
+const chatInput   = document.getElementById('chatInput');
+// historial para mantener contexto en la conversación
+let chatHistory = [];
+
+function agregarMensaje(tipo, texto) {
+    const div = document.createElement('div');
+    div.className = 'msg-' + tipo;
+    div.textContent = texto;
+    chatOutput.appendChild(div);
+    chatOutput.scrollTop = chatOutput.scrollHeight;
+    return div;
+}
+
+async function enviarChat() {
+    const texto = chatInput.value.trim();
+    if (!texto || !getKey()) return;
+
+    chatInput.value = '';
+    chatSendBtn.disabled = true;
+
+    agregarMensaje('user', texto);
+
+    // Indicador de carga
+    const typing = agregarMensaje('typing-indicator', '█ procesando...');
+
+    chatHistory.push({ role: 'user', parts: [{ text: texto }] });
+
+    // Prompt de sistema para que responda en personaje
+    const systemContext = `Eres el terminal de supervivencia del M.E.G. (Major Explorer Group) de los Backrooms.
+Respondes en español, de forma concisa (máximo 3-4 oraciones), con tono de urgencia y misterio propio de los Backrooms.
+Usa terminología de los Backrooms: no-clip, niveles, entidades, Almond Water, M.E.G., wanderers.
+Nunca salgas del personaje. Si preguntan algo ajeno a los Backrooms, redirige al tema.
+Pregunta del explorador: ${texto}`;
+
+    try {
+        const respuesta = await llamarGemini(systemContext);
+        typing.remove();
+        agregarMensaje('ai', respuesta);
+        chatHistory.push({ role: 'model', parts: [{ text: respuesta }] });
+        // Limitar historial a últimas 10 entradas
+        if (chatHistory.length > 10) chatHistory = chatHistory.slice(-10);
+    } catch (err) {
+        typing.remove();
+        agregarMensaje('system', '⚠ ERROR: ' + err.message);
+    }
+
+    chatSendBtn.disabled = false;
+    chatInput.focus();
+}
+
+// Enviar con Enter
+chatInput.addEventListener('keydown', e => { if (e.key === 'Enter') enviarChat(); });
+chatSendBtn.addEventListener('click', enviarChat);
+
+// Botones rápidos
+document.querySelectorAll('.quick-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        chatInput.value = btn.dataset.q;
+        enviarChat();
+    });
+});
+
+// ══ GENERADOR DE FICHAS CON IA ══
+btnGenerarIA.addEventListener('click', async () => {
+    const nombre = document.getElementById('nombreAnomalia').value.trim();
+    const tipo   = document.getElementById('tipoAnomalia').value;
+
+    if (!nombre) {
+        alert('Pon primero el nombre de la anomalía para que la IA lo use.');
+        return;
+    }
+
+    btnGenerarIA.disabled = true;
+    btnGenerarIA.textContent = '✦ GENERANDO...';
+
+    const prompt = `Eres un escritor de lore de los Backrooms. Genera una descripción breve y perturbadora (2-3 oraciones, máximo 200 caracteres) en español para una ${tipo.toLowerCase()} de los Backrooms llamada "${nombre}". Solo devuelve la descripción, sin comillas, sin explicaciones extra.`;
+
+    try {
+        const desc = await llamarGemini(prompt);
+        document.getElementById('descAnomalia').value = desc.replace(/^"|"$/g, '').trim();
+        mostrarToast('DESCRIPCIÓN GENERADA', '#8e44ad');
+    } catch (err) {
+        alert('Error de IA: ' + err.message);
+    }
+
+    btnGenerarIA.disabled = false;
+    btnGenerarIA.textContent = '✦ GENERAR DESCRIPCIÓN CON IA';
+});
 
 </script>
 </body>
