@@ -1,0 +1,1139 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Backrooms Database | Archivo de Anomalías</title>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --mono-yellow: #f4d03f;
+            --dark-orange: #d35400;
+            --burnt-orange: #e67e22;
+            --amber: #ffbf00;
+            --darker-bg: #0d0d0d;
+            --text-glow: 0 0 10px rgba(244, 208, 63, 0.5);
+        }
+
+        body {
+            font-family: 'Share Tech Mono', monospace;
+            background-color: var(--darker-bg);
+            color: #e0e0e0;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 1000;
+            opacity: 0.4;
+        }
+
+        .scanlines {
+            position: fixed;
+            inset: 0;
+            background: repeating-linear-gradient(
+                to bottom,
+                transparent 0px,
+                transparent 2px,
+                rgba(0,0,0,0.08) 2px,
+                rgba(0,0,0,0.08) 4px
+            );
+            pointer-events: none;
+            z-index: 999;
+        }
+
+        /* ── HEADER ── */
+        header {
+            background: linear-gradient(180deg, #2a1a00 0%, #1a0f00 100%);
+            border-bottom: 3px solid var(--burnt-orange);
+        }
+
+        .header-bar {
+            background: linear-gradient(90deg, transparent, var(--dark-orange) 20%, var(--burnt-orange) 50%, var(--dark-orange) 80%, transparent);
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 20px rgba(230,126,34,0.4);
+        }
+
+        .logo {
+            font-family: 'VT323', monospace;
+            font-size: 3rem;
+            color: var(--mono-yellow);
+            text-shadow: 0 0 10px var(--dark-orange), 0 0 20px var(--burnt-orange), 0 0 40px rgba(230,126,34,0.8);
+            letter-spacing: 4px;
+            animation: flicker 4s infinite;
+        }
+
+        @keyframes flicker {
+            0%,100% { opacity:1; }
+            5% { opacity:0.8; }
+            10% { opacity:1; }
+            52% { opacity:0.7; }
+            54% { opacity:0.95; }
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.8rem;
+            color: var(--amber);
+        }
+
+        .status-dot {
+            width: 8px; height: 8px;
+            background: #00ff00;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+            box-shadow: 0 0 10px #00ff00;
+        }
+
+        @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.4;} }
+
+        /* ── NAV ── */
+        nav {
+            background: rgba(0,0,0,0.8);
+            padding: 0.8rem 0;
+            border-bottom: 1px solid var(--dark-orange);
+        }
+
+        .nav-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            list-style: none;
+            flex-wrap: wrap;
+            padding: 0 1rem;
+        }
+
+        .nav-links a {
+            color: var(--mono-yellow);
+            text-decoration: none;
+            padding: 0.4rem 1rem;
+            border: 1px solid var(--dark-orange);
+            background: rgba(211,84,0,0.1);
+            transition: all 0.3s;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+        }
+
+        .nav-links a:hover {
+            background: var(--dark-orange);
+            color: #000;
+            box-shadow: 0 0 15px var(--burnt-orange);
+        }
+
+        /* ── MAIN ── */
+        main {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* ── HERO ── */
+        .hero {
+            border: 2px solid var(--dark-orange);
+            padding: 0.3rem;
+            margin-bottom: 3rem;
+            background: linear-gradient(45deg, var(--dark-orange), var(--mono-yellow), var(--dark-orange));
+            background-size: 400%;
+            animation: borderGlow 3s linear infinite;
+        }
+
+        @keyframes borderGlow {
+            0%   { background-position: 0% 50%; }
+            50%  { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .hero-inner {
+            background: var(--darker-bg);
+            padding: 2.5rem;
+        }
+
+        .hero h1 {
+            font-family: 'VT323', monospace;
+            font-size: 3rem;
+            color: var(--mono-yellow);
+            margin-bottom: 1rem;
+            text-shadow: var(--text-glow);
+        }
+
+        .hero p { color: #aaa; font-size: 1rem; line-height: 1.6; max-width: 800px; }
+
+        .warning-box {
+            background: rgba(211,84,0,0.2);
+            border-left: 4px solid var(--burnt-orange);
+            padding: 1rem;
+            margin-top: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .warning-icon { font-size: 1.8rem; animation: blink 1s infinite; }
+        @keyframes blink { 0%,50%{opacity:1;} 51%,100%{opacity:0;} }
+
+        /* ── CONTENT GRID ── */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 280px;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        /* RESPONSIVE: en móvil todo en columna */
+        @media (max-width: 900px) {
+            .content-grid { grid-template-columns: 1fr; }
+            .logo { font-size: 1.8rem; letter-spacing: 2px; }
+            .hero h1 { font-size: 2rem; }
+            .recording-card { flex-direction: column; }
+            .recording-thumb { width: 100%; height: 120px; }
+        }
+
+        /* ── ANOMALY CARDS ── */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid var(--dark-orange);
+            padding-bottom: 0.5rem;
+        }
+
+        .section-title {
+            font-family: 'VT323', monospace;
+            font-size: 2rem;
+            color: var(--amber);
+        }
+
+        .view-all { color: var(--burnt-orange); text-decoration: none; font-size: 0.9rem; }
+        .view-all:hover { color: var(--mono-yellow); }
+
+        .anomaly-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .anomaly-card {
+            background: linear-gradient(180deg, #1a1a1a 0%, #0d0d0d 100%);
+            border: 1px solid var(--dark-orange);
+            padding: 1.5rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .anomaly-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 3px;
+            background: linear-gradient(90deg, var(--dark-orange), var(--mono-yellow));
+            transform: scaleX(0);
+            transition: transform 0.3s;
+        }
+
+        .anomaly-card:hover { transform: translateY(-4px); box-shadow: 0 10px 30px rgba(230,126,34,0.25); border-color: var(--burnt-orange); }
+        .anomaly-card:hover::before { transform: scaleX(1); }
+
+        .anomaly-id { font-size: 0.75rem; color: var(--burnt-orange); margin-bottom: 0.4rem; font-weight: bold; }
+        .anomaly-title { font-size: 1.25rem; color: var(--mono-yellow); margin-bottom: 0.5rem; font-family: 'VT323', monospace; }
+        .anomaly-meta { display: flex; gap: 1rem; font-size: 0.78rem; color: #666; margin-bottom: 1rem; align-items: center; }
+        .anomaly-desc { color: #999; font-size: 0.88rem; line-height: 1.5; margin-bottom: 1rem; }
+        .anomaly-footer { display: flex; justify-content: space-between; font-size: 0.78rem; color: #555; border-top: 1px solid #333; padding-top: 0.5rem; }
+
+        /* Clases de dificultad */
+        .diff { display: inline-block; padding: 0.15rem 0.5rem; font-size: 0.72rem; font-weight: bold; text-transform: uppercase; }
+        .diff-0 { background: #2ecc71; color: #000; }
+        .diff-1 { background: #f1c40f; color: #000; }
+        .diff-2 { background: #e67e22; color: #000; }
+        .diff-3 { background: #e74c3c; color: #fff; }
+        .diff-4 { background: #8e44ad; color: #fff; }
+        .diff-5 { background: #1a1a1a; color: #e74c3c; border: 1px solid #e74c3c; }
+
+        /* ── SIDEBAR ── */
+        .sidebar { display: flex; flex-direction: column; gap: 2rem; }
+
+        .sidebar-module {
+            background: rgba(0,0,0,0.5);
+            border: 1px solid var(--dark-orange);
+            padding: 1.5rem;
+        }
+
+        .sidebar-title {
+            font-family: 'VT323', monospace;
+            font-size: 1.5rem;
+            color: var(--amber);
+            margin-bottom: 1rem;
+            border-bottom: 1px solid var(--dark-orange);
+            padding-bottom: 0.5rem;
+        }
+
+        /* Botones */
+        .btn-primary {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, var(--dark-orange), var(--burnt-orange));
+            border: none;
+            color: #000;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.95rem;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.3s;
+            margin-bottom: 0.8rem;
+        }
+
+        .btn-primary:hover { box-shadow: 0 0 20px var(--burnt-orange); transform: scale(1.02); }
+
+        .btn-secondary {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            border: none;
+            color: var(--mono-yellow);
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.95rem;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.3s;
+        }
+
+        .btn-secondary:hover { box-shadow: 0 0 15px rgba(244,208,63,0.3); transform: scale(1.02); }
+
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #333;
+            font-size: 0.88rem;
+        }
+        .stat-item:last-child { border-bottom: none; }
+        .stat-value { color: var(--mono-yellow); font-weight: bold; }
+
+        /* ── GRABACIONES ── */
+        .recordings-section {
+            border-top: 2px solid var(--dark-orange);
+            padding: 2.5rem 0;
+            margin-top: 1rem;
+        }
+
+        .recording-card {
+            display: flex;
+            gap: 1.5rem;
+            background: rgba(0,0,0,0.6);
+            border: 1px solid #333;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s;
+        }
+
+        .recording-card:hover { border-color: var(--burnt-orange); background: rgba(211,84,0,0.08); }
+
+        .recording-thumb {
+            width: 160px;
+            height: 90px;
+            background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
+            border: 1px solid var(--dark-orange);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .play-icon {
+            width: 40px; height: 40px;
+            background: var(--burnt-orange);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #000;
+            font-size: 1.2rem;
+            transition: transform 0.3s;
+        }
+
+        .recording-card:hover .play-icon { transform: scale(1.1); background: var(--mono-yellow); }
+
+        .recording-title { font-size: 1.15rem; color: var(--mono-yellow); margin-bottom: 0.4rem; }
+        .recording-meta { color: #666; font-size: 0.82rem; margin-bottom: 0.5rem; }
+        .recording-desc { color: #888; font-size: 0.88rem; line-height: 1.4; }
+
+        .tag {
+            display: inline-block;
+            background: rgba(211,84,0,0.2);
+            color: var(--burnt-orange);
+            padding: 0.15rem 0.5rem;
+            font-size: 0.72rem;
+            border: 1px solid var(--dark-orange);
+            margin-right: 0.4rem;
+            margin-top: 0.4rem;
+        }
+
+        /* ── VIDEO GRID ── */
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+            gap: 2rem;
+        }
+
+        @media (max-width: 900px) {
+            .video-grid { grid-template-columns: 1fr; }
+        }
+
+        .video-card {
+            background: rgba(0,0,0,0.6);
+            border: 1px solid #333;
+            transition: all 0.3s;
+            overflow: hidden;
+        }
+
+        .video-card:hover { border-color: var(--burnt-orange); }
+
+        /* Truco para que el iframe sea responsive (ratio 16:9) */
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 */
+            height: 0;
+            overflow: hidden;
+        }
+
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .video-info { padding: 1.2rem; }
+
+        /* ── FOOTER ── */
+        footer {
+            background: #000;
+            border-top: 3px solid var(--dark-orange);
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        .footer-logo { font-family: 'VT323', monospace; font-size: 2rem; color: var(--dark-orange); margin-bottom: 1rem; }
+        .footer-text { color: #555; font-size: 0.88rem; max-width: 600px; margin: 0 auto; line-height: 1.6; }
+        .footer-copy { color: #333; font-size: 0.78rem; margin-top: 1.5rem; }
+
+        /* ════════════════════════════════════
+           MODAL — la ventana emergente para publicar
+           ════════════════════════════════════ */
+        .modal-overlay {
+            /* Cubre toda la pantalla con fondo semi-transparente */
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.85);
+            z-index: 9000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            /* Empieza oculto */
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        /* Cuando le agregamos la clase .active, se hace visible */
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal {
+            background: #111;
+            border: 2px solid var(--burnt-orange);
+            padding: 2rem;
+            width: 100%;
+            max-width: 550px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            transform: translateY(20px);
+            transition: transform 0.3s;
+        }
+
+        .modal-overlay.active .modal { transform: translateY(0); }
+
+        .modal-title {
+            font-family: 'VT323', monospace;
+            font-size: 2rem;
+            color: var(--mono-yellow);
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--dark-orange);
+            padding-bottom: 0.5rem;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem; right: 1rem;
+            background: none;
+            border: 1px solid var(--dark-orange);
+            color: var(--burnt-orange);
+            font-size: 1.2rem;
+            cursor: pointer;
+            width: 32px; height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .modal-close:hover { background: var(--dark-orange); color: #000; }
+
+        /* Campos del formulario */
+        .form-group { margin-bottom: 1.2rem; }
+
+        .form-label {
+            display: block;
+            font-size: 0.82rem;
+            color: var(--amber);
+            margin-bottom: 0.4rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            background: #1a1a1a;
+            border: 1px solid var(--dark-orange);
+            color: #e0e0e0;
+            padding: 0.7rem;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.9rem;
+            transition: border-color 0.2s;
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--mono-yellow);
+            box-shadow: 0 0 8px rgba(244,208,63,0.2);
+        }
+
+        .form-textarea { height: 100px; resize: vertical; }
+
+        .form-select option { background: #1a1a1a; }
+
+        .btn-submit {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, var(--dark-orange), var(--burnt-orange));
+            border: none;
+            color: #000;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.3s;
+            margin-top: 0.5rem;
+        }
+
+        .btn-submit:hover { box-shadow: 0 0 20px var(--burnt-orange); }
+
+        /* Notificación de éxito */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: #1a1a1a;
+            border: 1px solid #2ecc71;
+            color: #2ecc71;
+            padding: 1rem 1.5rem;
+            font-size: 0.9rem;
+            z-index: 9999;
+            transform: translateX(200%);
+            transition: transform 0.4s;
+        }
+
+        .toast.show { transform: translateX(0); }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0d0d0d; }
+        ::-webkit-scrollbar-thumb { background: var(--dark-orange); }
+        ::-webkit-scrollbar-thumb:hover { background: var(--burnt-orange); }
+    </style>
+</head>
+<body>
+
+<div class="scanlines"></div>
+
+<!-- ══ MODAL: Ventana para publicar anomalía ══ -->
+<div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+        <button class="modal-close" id="modalClose">✕</button>
+        <h2 class="modal-title">📡 REPORTAR ANOMALÍA</h2>
+
+        <div class="form-group">
+            <label class="form-label">Tipo de anomalía</label>
+            <select class="form-select" id="tipoAnomalia">
+                <option value="NIVEL">Nivel</option>
+                <option value="ENTIDAD">Entidad</option>
+                <option value="OBJETO">Objeto</option>
+                <option value="FENÓMENO">Fenómeno</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Número / ID</label>
+            <input type="text" class="form-input" id="numeroAnomalia" placeholder="ej: 922, 67, 1...">
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Nombre</label>
+            <input type="text" class="form-input" id="nombreAnomalia" placeholder='ej: "The Poolrooms"'>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Clase de peligro</label>
+            <select class="form-select" id="claseAnomalia">
+                <option value="0">Clase 0 — Segura</option>
+                <option value="1">Clase 1 — Baja</option>
+                <option value="2">Clase 2 — Moderada</option>
+                <option value="3">Clase 3 — Alta</option>
+                <option value="4">Clase 4 — Extrema</option>
+                <option value="5">Clase 5 — No clasificable</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Descripción</label>
+            <textarea class="form-textarea" id="descAnomalia" placeholder="Describe el nivel, entidad u objeto..."></textarea>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Tu nombre de explorador</label>
+            <input type="text" class="form-input" id="autorAnomalia" placeholder="@usuario">
+        </div>
+
+        <button class="btn-submit" id="btnPublicar">▶ PUBLICAR REPORTE</button>
+    </div>
+</div>
+
+<!-- ══ TOAST (notificación flotante) ══ -->
+<div class="toast" id="toast">✓ REPORTE PUBLICADO EXITOSAMENTE</div>
+
+<!-- ══ HEADER ══ -->
+<header>
+    <div class="header-bar">
+        <div class="logo">THE BACKROOMS DATABASE</div>
+    </div>
+    <div class="nav-container">
+        <div class="status-indicator">
+            <div class="status-dot"></div>
+            <span>BASE DE DATOS ACTIVA // CONEXIÓN ESTABLE</span>
+        </div>
+        <div style="color: var(--burnt-orange); font-size: 0.8rem;">
+            TIMESTAMP: <span id="timestamp"></span>
+        </div>
+    </div>
+</header>
+
+<nav>
+    <ul class="nav-links">
+        <li><a href="#niveles">Niveles</a></li>
+        <li><a href="#entidades">Entidades</a></li>
+        <li><a href="#objetos">Objetos</a></li>
+        <li><a href="#fenomenos">Fenómenos</a></li>
+        <li><a href="#grabaciones">Grabaciones</a></li>
+    </ul>
+</nav>
+
+<!-- ══ MAIN ══ -->
+<main>
+    <section class="hero">
+        <div class="hero-inner">
+            <h1>ARCHIVO DE ANOMALÍAS</h1>
+            <p>Bienvenido, explorador. Esta es la base de datos central para documentar los niveles, entidades y fenómenos anómalos de los Backrooms.</p>
+            <div class="warning-box">
+                <span class="warning-icon">⚠️</span>
+                <div>
+                    <strong style="color:#e67e22;">ADVERTENCIA:</strong> La información está en constante cambio. Los Backrooms son inestables. Sigue documentando.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══ GRID PRINCIPAL ══ -->
+    <div class="content-grid">
+
+        <!-- Columna izquierda: cards -->
+        <div>
+            <div class="section-header">
+                <h2 class="section-title">Anomalías Recientes</h2>
+                <a href="#" class="view-all">Ver todo ></a>
+            </div>
+
+            <!-- Las cards se generan aquí dinámicamente con JS -->
+            <div class="anomaly-grid" id="anomalyGrid"></div>
+        </div>
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-module">
+                <h3 class="sidebar-title">📤 Subir Documentación</h3>
+                <!-- Al hacer click, abre el modal -->
+                <button class="btn-primary" id="btnAbrirModal">+ Nueva Anomalía</button>
+                <button class="btn-secondary">📹 Subir Grabación</button>
+            </div>
+
+            <div class="sidebar-module">
+                <h3 class="sidebar-title">📊 Estadísticas</h3>
+                <div class="stat-item">
+                    <span>Niveles Documentados:</span>
+                    <span class="stat-value" id="statNiveles">0</span>
+                </div>
+                <div class="stat-item">
+                    <span>Entidades Catalogadas:</span>
+                    <span class="stat-value" id="statEntidades">0</span>
+                </div>
+                <div class="stat-item">
+                    <span>Objetos Registrados:</span>
+                    <span class="stat-value" id="statObjetos">0</span>
+                </div>
+                <div class="stat-item">
+                    <span>Total Reportes:</span>
+                    <span class="stat-value" id="statTotal">0</span>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- ══ GRABACIONES ══ -->
+    <section class="recordings-section" id="grabaciones">
+        <div class="section-header">
+            <h2 class="section-title">🎥 Archivo de Grabaciones</h2>
+            <a href="#" class="view-all">Ver archivo ></a>
+        </div>
+
+        <!-- Grid de videos 2 columnas -->
+        <div class="video-grid">
+
+            <div class="video-card">
+                <div class="video-wrapper">
+                    <iframe src="https://www.youtube.com/embed/g_ziJtNEmsQ"
+                        title="ALL Backrooms Creatures & Entities Explained"
+                        frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowfullscreen>
+                    </iframe>
+                </div>
+                <div class="video-info">
+                    <h3 class="recording-title">TODAS las Criaturas y Entidades — Explicadas</h3>
+                    <div class="recording-meta">Broogli • Cobertura completa del canon • +3M vistas</div>
+                    <p class="recording-desc">La guía más completa: docenas de entidades explicadas con narración creepy. Cubre Facelings, Deathmoths, Skin-Stealers y más.</p>
+                    <div><span class="tag">Entidades</span><span class="tag">Canon</span><span class="tag">Esencial</span></div>
+                </div>
+            </div>
+
+            <div class="video-card">
+                <div class="video-wrapper">
+                    <iframe src="https://www.youtube.com/embed/ETxi8lrSjl0"
+                        title="Entity 2 Windows - Briggy Ninja"
+                        frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowfullscreen>
+                    </iframe>
+                </div>
+                <div class="video-info">
+                    <h3 class="recording-title">ENTIDAD 2 — "Windows" | Encuentro Documentado</h3>
+                    <div class="recording-meta">Briggy Ninja • Found Footage • Calidad: Media</div>
+                    <p class="recording-desc">Ventanas falsas que inducen paranoia y succionan a quienes se acercan demasiado. Uno de los encuentros más perturbadores registrados.</p>
+                    <div><span class="tag">Entidad 2</span><span class="tag">Peligroso</span><span class="tag">Found Footage</span></div>
+                </div>
+            </div>
+
+            <div class="video-card">
+                <div class="video-wrapper">
+                    <iframe src="https://www.youtube.com/embed/FL05Lt7SCqw"
+                        title="Frowners vs Smilers"
+                        frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowfullscreen>
+                    </iframe>
+                </div>
+                <div class="video-info">
+                    <h3 class="recording-title">ENTIDAD 3 — Frowners vs Smilers</h3>
+                    <div class="recording-meta">Unknown Nightmares • Entidades visuales • Viral</div>
+                    <p class="recording-desc">Sonrisas flotantes en oscuridad total. Solo dientes y ojos. Uno de los videos de entidades más virales del archivo. Si ves una, corre.</p>
+                    <div><span class="tag">Entidad 3</span><span class="tag">Smilers</span><span class="tag">Clase 5</span></div>
+                </div>
+            </div>
+
+            <div class="video-card">
+                <div class="video-wrapper">
+                    <iframe src="https://www.youtube.com/embed/XIaJhPtzAuw"
+                        title="Entities of The Backrooms - A Field Guide"
+                        frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowfullscreen>
+                    </iframe>
+                </div>
+                <div class="video-info">
+                    <h3 class="recording-title">GUÍA DE CAMPO — Entidades de los Backrooms</h3>
+                    <div class="recording-meta">Thought Potato • Guía completa • Atmósfera intensa</div>
+                    <p class="recording-desc">Incluye los Clumps (Entidad 5): masas de carne fusionada que absorben todo a su paso. Guía de campo con narración de alta producción.</p>
+                    <div><span class="tag">Clumps</span><span class="tag">Guía de Campo</span><span class="tag">Multi-entidad</span></div>
+                </div>
+            </div>
+
+            <div class="video-card">
+                <div class="video-wrapper">
+                    <iframe src="https://www.youtube.com/embed/3SP5XrudqOI"
+                        title="Entities Encounters Found Footages Compilation"
+                        frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowfullscreen>
+                    </iframe>
+                </div>
+                <div class="video-info">
+                    <h3 class="recording-title">ENCUENTROS — Compilación de Found Footages</h3>
+                    <div class="recording-meta">Archivo M.E.G. • Multi-entidad • Incluye Hound (Entidad 8)</div>
+                    <p class="recording-desc">Encuentros "reales" con varias entidades. Incluye al Hound — perros mutados que persiguen sin parar. Grabaciones de campo de múltiples exploradores.</p>
+                    <div><span class="tag">Entidad 8</span><span class="tag">Hound</span><span class="tag">Found Footage</span></div>
+                </div>
+            </div>
+
+            <div class="video-card">
+                <div class="video-wrapper">
+                    <iframe src="https://www.youtube.com/embed/2cgUPRmJngQ"
+                        title="Top 7 Deadliest Backrooms Entities 2025"
+                        frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowfullscreen>
+                    </iframe>
+                </div>
+                <div class="video-info">
+                    <h3 class="recording-title">TOP 7 — Entidades Más Mortales (2025)</h3>
+                    <div class="recording-meta">Actualización 2025 • Ranking oficial M.E.G. • Alta prioridad</div>
+                    <p class="recording-desc">Ranking actualizado de las entidades con mayor tasa de bajas confirmadas. Incluye Skin-Stealers y Partygoers en posiciones críticas.</p>
+                    <div><span class="tag">Ranking</span><span class="tag">Skin-Stealers</span><span class="tag">2025</span></div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+</main>
+
+<footer>
+    <div class="footer-logo">THE BACKROOMS DATABASE</div>
+    <p class="footer-text">Esta base de datos es mantenida por exploradores independientes y el M.E.G. (Major Explorer Group). Si estás leyendo esto, ya es demasiado tarde para volver atrás.</p>
+    <p class="footer-copy">© 2026 The Backrooms Database | "Si escuchas algo caminando cerca, es porque ya te ha escuchado a ti."</p>
+</footer>
+
+
+<!-- ══════════════════════════════════════
+     JAVASCRIPT — aquí empieza la magia
+     ══════════════════════════════════════ -->
+<script>
+
+// ── 1. TIMESTAMP EN TIEMPO REAL ──
+// setInterval ejecuta una función cada X milisegundos (1000 = 1 segundo)
+function actualizarTimestamp() {
+    const ahora = new Date();
+    document.getElementById('timestamp').textContent =
+        ahora.toISOString().replace('T', ' ').substring(0, 19);
+}
+setInterval(actualizarTimestamp, 1000);
+actualizarTimestamp();
+
+
+// ── 2. DATOS INICIALES ──
+// Estas son las anomalías que vienen "de fábrica" en la base de datos.
+// Cada objeto {} tiene las propiedades de una anomalía.
+const anomaliasIniciales = [
+    {
+        tipo: 'ENTIDAD',
+        numero: '1',
+        nombre: '"Facelings"',
+        clase: '3',
+        descripcion: 'Humanos que parecen normales... pero algo está fundamentalmente mal. Pueden ser pacíficos o hostiles dependiendo del nivel en que se encuentren. No hacer contacto visual.',
+        autor: '@meg_operator',
+        fecha: 'Hace 1 hora',
+        grabaciones: 7
+    },
+    {
+        tipo: 'ENTIDAD',
+        numero: '2',
+        nombre: '"Windows"',
+        clase: '4',
+        descripcion: 'Ventanas falsas que te observan y generan paranoia progresiva. Si te acercas demasiado, te succionan al interior. Nunca te aproximes a menos de 3 metros.',
+        autor: '@briggy_field',
+        fecha: 'Hace 3 horas',
+        grabaciones: 4
+    },
+    {
+        tipo: 'ENTIDAD',
+        numero: '3',
+        nombre: '"Smilers"',
+        clase: '5',
+        descripcion: 'Sonrisas flotantes en la oscuridad total. Solo dientes y ojos luminosos. Si ves una sonrisa donde no debería haber nada, ya es demasiado tarde para pensar. Corre.',
+        autor: '@unknown_nightmares',
+        fecha: 'Hace 5 horas',
+        grabaciones: 12
+    },
+    {
+        tipo: 'ENTIDAD',
+        numero: '4',
+        nombre: '"Deathmoths"',
+        clase: '4',
+        descripcion: 'Polillas gigantes luminosas que atraen con su luz a exploradores desprevenidos. Una vez cerca, atacan con velocidad letal. Nunca sigas luces desconocidas en los Backrooms.',
+        autor: '@broogli_archive',
+        fecha: 'Hace 6 horas',
+        grabaciones: 5
+    },
+    {
+        tipo: 'ENTIDAD',
+        numero: '5',
+        nombre: '"Clumps"',
+        clase: '5',
+        descripcion: 'Masas de carne fusionada de origen desconocido. Absorben todo lo que tocan — orgánico e inorgánico. No hay forma confirmada de neutralizarlos. Huir es la única opción.',
+        autor: '@thought_potato',
+        fecha: 'Hace 8 horas',
+        grabaciones: 3
+    },
+    {
+        tipo: 'ENTIDAD',
+        numero: '8',
+        nombre: '"Hound"',
+        clase: '4',
+        descripcion: 'Perros mutados de cuatro patas con capacidades sensoriales superiores. Persiguen sin parar y no se cansan. Correr en zigzag y evitar espacios abiertos es la única táctica documentada.',
+        autor: '@field_recorder_09',
+        fecha: 'Hace 12 horas',
+        grabaciones: 9
+    },
+    {
+        tipo: 'ENTIDAD',
+        numero: '10',
+        nombre: '"Skin-Stealers"',
+        clase: '5',
+        descripcion: 'Te roban la piel y se disfrazan de humanos para cazar a otros exploradores. Identificarlos: movimientos ligeramente fuera de fase, temperatura corporal fría al tacto, pupilas sin reflejo.',
+        autor: '@meg_classified',
+        fecha: 'Hace 1 día',
+        grabaciones: 2
+    },
+    {
+        tipo: 'ENTIDAD',
+        numero: '∞',
+        nombre: '"Partygoers"',
+        clase: '5',
+        descripcion: 'Caras sonrientes amarillas que te invitan a fiestas eternas en el Nivel Fun. Nadie que ha aceptado la invitación ha regresado. Su presencia va acompañada de música distante y globos.',
+        autor: '@meg_operator',
+        fecha: 'Hace 1 día',
+        grabaciones: 15
+    },
+    {
+        tipo: 'NIVEL',
+        numero: '37',
+        nombre: '"The Poolrooms"',
+        clase: '2',
+        descripcion: 'Complejo acuático interior infinito con agua de color turquesa. Relativamente seguro pero fácil perderse. Agua potable disponible. Reportes de figuras bajo el agua no confirmados.',
+        autor: '@pool_explorer',
+        fecha: 'Hace 2 días',
+        grabaciones: 8
+    },
+    {
+        tipo: 'OBJETO',
+        numero: '1',
+        nombre: '"Almond Water"',
+        clase: '0',
+        descripcion: 'Sustancia líquida de color amarillo pálido con sabor a almendra. Restaura cordura e hidrata. El recurso más valioso para sobrevivientes. Origen desconocido.',
+        autor: '@survival_guide',
+        fecha: 'Hace 2 días',
+        grabaciones: 0
+    }
+];
+
+
+// ── 3. LOCALSTORAGE ──
+// localStorage es como una "caja de guardado" en tu navegador.
+// Los datos se quedan aunque recargues la página.
+// JSON.parse convierte texto guardado → objeto JavaScript
+// JSON.stringify convierte objeto JavaScript → texto para guardar
+
+function cargarAnomalias() {
+    // Intentamos leer el guardado. Si no existe, usamos las iniciales.
+    const guardadas = localStorage.getItem('backrooms_anomalias');
+    return guardadas ? JSON.parse(guardadas) : anomaliasIniciales;
+}
+
+function guardarAnomalias(lista) {
+    localStorage.setItem('backrooms_anomalias', JSON.stringify(lista));
+}
+
+
+// ── 4. RENDERIZAR CARDS ──
+// Esta función toma la lista de anomalías y construye el HTML de las cards.
+function renderizarCards() {
+    const lista = cargarAnomalias();
+    const grid = document.getElementById('anomalyGrid');
+
+    // innerHTML = el contenido HTML dentro del elemento
+    // Usamos .map() para transformar cada anomalía en HTML
+    // y .join('') para unir todo en un solo string
+    grid.innerHTML = lista.map(a => `
+        <article class="anomaly-card">
+            <div class="anomaly-id">${a.tipo} ${a.numero}</div>
+            <h3 class="anomaly-title">${a.nombre}</h3>
+            <div class="anomaly-meta">
+                <span class="diff diff-${a.clase}">Clase ${a.clase}</span>
+                <span>● ${a.fecha}</span>
+            </div>
+            <p class="anomaly-desc">${a.descripcion}</p>
+            <div class="anomaly-footer">
+                <span style="color:var(--burnt-orange)">${a.autor}</span>
+                <span>📹 ${a.grabaciones} grabaciones</span>
+            </div>
+        </article>
+    `).join('');
+
+    // Actualizar estadísticas del sidebar
+    actualizarStats(lista);
+}
+
+
+// ── 5. ESTADÍSTICAS ──
+function actualizarStats(lista) {
+    // .filter() devuelve solo los elementos que cumplen la condición
+    const niveles   = lista.filter(a => a.tipo === 'NIVEL').length;
+    const entidades = lista.filter(a => a.tipo === 'ENTIDAD').length;
+    const objetos   = lista.filter(a => a.tipo === 'OBJETO' || a.tipo === 'FENÓMENO').length;
+
+    document.getElementById('statNiveles').textContent   = niveles;
+    document.getElementById('statEntidades').textContent = entidades;
+    document.getElementById('statObjetos').textContent   = objetos;
+    document.getElementById('statTotal').textContent     = lista.length;
+}
+
+
+// ── 6. MODAL ──
+// querySelector busca un elemento por su selector CSS
+const modalOverlay = document.getElementById('modalOverlay');
+const btnAbrir     = document.getElementById('btnAbrirModal');
+const btnCerrar    = document.getElementById('modalClose');
+
+// Al hacer click en "Nueva Anomalía", agregar la clase 'active' al modal
+btnAbrir.addEventListener('click', () => {
+    modalOverlay.classList.add('active');
+});
+
+// Al hacer click en ✕, quitar la clase 'active'
+btnCerrar.addEventListener('click', () => {
+    modalOverlay.classList.remove('active');
+});
+
+// Al hacer click FUERA del modal (en el overlay oscuro), también cierra
+modalOverlay.addEventListener('click', (e) => {
+    // e.target es lo que recibió el click
+    // Solo cerramos si clickearon el overlay, no el modal mismo
+    if (e.target === modalOverlay) {
+        modalOverlay.classList.remove('active');
+    }
+});
+
+
+// ── 7. PUBLICAR ANOMALÍA ──
+document.getElementById('btnPublicar').addEventListener('click', () => {
+
+    // Leer los valores del formulario
+    const tipo   = document.getElementById('tipoAnomalia').value;
+    const numero = document.getElementById('numeroAnomalia').value.trim();
+    const nombre = document.getElementById('nombreAnomalia').value.trim();
+    const clase  = document.getElementById('claseAnomalia').value;
+    const desc   = document.getElementById('descAnomalia').value.trim();
+    const autor  = document.getElementById('autorAnomalia').value.trim();
+
+    // Validación básica: si falta algo importante, no publicar
+    if (!numero || !nombre || !desc) {
+        alert('⚠️ Completa al menos el número, nombre y descripción.');
+        return; // "return" detiene la función aquí
+    }
+
+    // Crear el objeto de la nueva anomalía
+    const nueva = {
+        tipo,
+        numero,
+        nombre: `"${nombre}"`,
+        clase,
+        descripcion: desc,
+        autor: autor ? `@${autor.replace('@', '')}` : '@anónimo',
+        fecha: 'Ahora mismo',
+        grabaciones: 0
+    };
+
+    // Agregar al principio de la lista (para que aparezca primero)
+    const lista = cargarAnomalias();
+    lista.unshift(nueva); // unshift agrega al inicio del array
+    guardarAnomalias(lista);
+
+    // Volver a dibujar las cards con la nueva anomalía
+    renderizarCards();
+
+    // Cerrar modal y limpiar formulario
+    modalOverlay.classList.remove('active');
+    document.getElementById('numeroAnomalia').value = '';
+    document.getElementById('nombreAnomalia').value = '';
+    document.getElementById('descAnomalia').value = '';
+    document.getElementById('autorAnomalia').value = '';
+
+    // Mostrar notificación de éxito
+    mostrarToast();
+});
+
+
+// ── 8. TOAST (notificación) ──
+function mostrarToast() {
+    const toast = document.getElementById('toast');
+    toast.classList.add('show');
+    // Después de 3 segundos, ocultar la notificación
+    setTimeout(() => {
+        toast.classList.remove('show');
+    }, 3000);
+}
+
+
+// ── 9. INICIAR LA PÁGINA ──
+// Esto se ejecuta cuando la página termina de cargar
+renderizarCards();
+
+</script>
+</body>
+</html>
